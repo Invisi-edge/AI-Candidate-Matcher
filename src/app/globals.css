@@ -694,6 +694,25 @@ textarea {
   gap: var(--space-3);
 }
 
+.dropzone-compact {
+  padding: 20px 16px;
+  min-height: 80px;
+  gap: var(--space-2);
+}
+
+.dropzone-compact .dropzone-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.dropzone-compact .dropzone-text {
+  font-size: 0.82rem;
+}
+
+.dropzone-compact .dropzone-hint {
+  font-size: 0.7rem;
+}
+
 .dropzone:hover {
   border-color: var(--accent);
   background: rgba(15, 118, 110, 0.04);

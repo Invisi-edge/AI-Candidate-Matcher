@@ -10,6 +10,7 @@ type DropZoneProps = {
   maxFiles?: number;
   label?: string;
   hint?: string;
+  compact?: boolean;
 };
 
 const DEFAULT_MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -29,6 +30,7 @@ export function DropZone({
   maxFiles = DEFAULT_MAX_FILES,
   label = "Drop files here or click to browse",
   hint,
+  compact = false,
 }: DropZoneProps) {
   const [isDragActive, setIsDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -138,6 +140,7 @@ export function DropZone({
 
   const containerClass = [
     "dropzone",
+    compact && "dropzone-compact",
     isDragActive && "drag-active",
     error && "has-error",
   ]

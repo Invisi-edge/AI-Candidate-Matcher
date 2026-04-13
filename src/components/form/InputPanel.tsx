@@ -289,6 +289,7 @@ export function InputPanel({
           multiple={false}
           onFilesSelected={(files) => onJobDescriptionFileChange(files[0] ?? null)}
           hint="PDF, DOCX, or TXT (max 10MB)"
+          compact
         />
         {jobDescriptionFile && (
           <FileList
