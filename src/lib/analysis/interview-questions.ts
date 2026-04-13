@@ -421,13 +421,17 @@ export function generateInterviewQuestions(
   const questions: InterviewQuestion[] = [];
   const addedSkills = new Set<string>();
 
-  // Clean up job title - remove "role" suffix if present to avoid "role role"
-  const cleanTitle = jobTitle.replace(/\s+role$/i, "").trim() || "this position";
+  // Clean up job title - remove "role" or "position" suffix to avoid duplication
+  let cleanTitle = jobTitle.replace(/\s+(role|position)$/i, "").trim();
+
+  // If the title is a placeholder like "this position", use it as-is without adding "position" again
+  const isPlaceholder = /^(this|the)\s+(role|position)$/i.test(cleanTitle);
+  const rolePhrase = isPlaceholder ? cleanTitle : `${cleanTitle} position`;
 
   // Add role-specific opener
   questions.push({
     category: "role_specific",
-    question: `Walk me through your experience that's most relevant to the ${cleanTitle} position.`,
+    question: `Walk me through your experience that's most relevant to ${rolePhrase}.`,
     purpose: "Get overall context and presentation skills",
     followUp: "What aspects of this role excite you most?",
   });

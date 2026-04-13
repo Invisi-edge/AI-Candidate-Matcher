@@ -285,23 +285,39 @@ function detectMissingInformation(text: string): RedFlag[] {
 }
 
 function detectOverqualification(text: string, jobDescription: string): RedFlag | null {
-  const resumeYearsMatch = text.match(/(\d{1,2})\+?\s*years?/gi);
+  // Extract required years from JD
   const jdYearsMatch = jobDescription.match(/(\d{1,2})\+?\s*years?/i);
+  if (!jdYearsMatch) {
+    return null; // No experience requirement in JD
+  }
 
-  if (resumeYearsMatch && jdYearsMatch) {
-    const resumeMaxYears = Math.max(
-      ...resumeYearsMatch.map((m) => parseInt(m.match(/\d+/)?.[0] || "0", 10))
-    );
-    const requiredYears = parseInt(jdYearsMatch[1], 10);
+  const requiredYears = parseInt(jdYearsMatch[1], 10);
 
-    if (resumeMaxYears > requiredYears * 2 && resumeMaxYears > 10) {
-      return {
-        type: "overqualification",
-        severity: "low",
-        description: "Candidate may be overqualified",
-        details: `Resume shows ${resumeMaxYears}+ years experience for a role requiring ${requiredYears} years. Consider discussing long-term fit and expectations.`,
-      };
-    }
+  // Calculate actual years of experience from work history
+  const roleRanges = getRoleRanges(text);
+  if (roleRanges.length === 0) {
+    return null; // Can't determine experience without dates
+  }
+
+  // Get the earliest start date and latest end date
+  const sortedRanges = roleRanges.sort((a, b) => a.start.value.getTime() - b.start.value.getTime());
+  const earliestStart = sortedRanges[0].start.value;
+  const latestEnd = sortedRanges[sortedRanges.length - 1].end.value;
+
+  // Calculate total years of experience (approximate)
+  const totalYears = (latestEnd.getFullYear() - earliestStart.getFullYear());
+
+  // Flag as overqualified if:
+  // 1. Total experience is more than 3x the requirement
+  // 2. Total experience is at least 15 years
+  // 3. Requirement is for junior-mid level (< 8 years)
+  if (totalYears > requiredYears * 3 && totalYears >= 15 && requiredYears < 8) {
+    return {
+      type: "overqualification",
+      severity: "low",
+      description: "Candidate may be overqualified",
+      details: `Resume shows approximately ${totalYears} years of work history for a role requiring ${requiredYears} years. Consider discussing long-term fit, expectations, and what attracts them to this level.`,
+    };
   }
 
   return null;
