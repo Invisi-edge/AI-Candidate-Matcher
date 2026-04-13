@@ -125,7 +125,7 @@ export function ResultsPanel({
 
       {analysisRunId && (
         <p className="success-text">
-          Saved to PostgreSQL. Analysis ID: {analysisRunId}
+          Analysis saved successfully
         </p>
       )}
 
@@ -193,8 +193,8 @@ export function ResultsPanel({
 
       <div className="history-block">
         <div className="panel-header">
-          <p className="eyebrow">Stored Runs</p>
-          <h2>Recent analyses saved in local PostgreSQL</h2>
+          <p className="eyebrow">Analysis History</p>
+          <h2>Saved analyses</h2>
         </div>
 
         {recentRuns.length > 0 ? (
