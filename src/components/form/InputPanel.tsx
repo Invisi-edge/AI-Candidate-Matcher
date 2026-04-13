@@ -256,19 +256,32 @@ export function InputPanel({
 
       <label className="field">
         <span>Job description template</span>
-        <select
-          className="select-field"
-          value={selectedTemplate}
-          onChange={(event) =>
-            handleTemplateChange(event.target.value as TemplateKey)
-          }
-        >
-          {Object.entries(JD_TEMPLATES).map(([key, template]) => (
-            <option key={key} value={key}>
-              {template.label}
-            </option>
-          ))}
-        </select>
+        <div className="select-wrapper">
+          <select
+            className="select-field"
+            value={selectedTemplate}
+            onChange={(event) =>
+              handleTemplateChange(event.target.value as TemplateKey)
+            }
+          >
+            {Object.entries(JD_TEMPLATES).map(([key, template]) => (
+              <option key={key} value={key}>
+                {template.label}
+              </option>
+            ))}
+          </select>
+          <svg
+            className="select-icon"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
         <small>Select a prebuilt JD and edit it as needed for the open role.</small>
       </label>
 
